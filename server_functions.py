@@ -47,39 +47,35 @@ items = [
     {"name": "Tablet", "base_price": 400},
 ]
 
-# TODO:
-# Create the variables needed to keep the record of connected clients.
-#
-# One possible design is:
-# clients = []
-# client_names = {}
-# client_files = {}
-# client_active = {}
-# passed_current_item = {}
+# variables needed to keep the record of connected clients.
+clients = []
+client_names = {}
+client_files = {}
+client_active = {}
+passed_current_item = {}
 
-# TODO:
-# Create the synchronization objects needed by the server.
-#
-# Suggested syntax:
-# clients_lock = threading.Lock()
-# auction_lock = threading.Lock()
-# bid_event = threading.Event()
-# stop_event = threading.Event()
+# synchronization objects needed by the server.
+clients_lock = threading.Lock()
+auction_lock = threading.Lock()
+bid_event = threading.Event()
+stop_event = threading.Event()
 
 # TODO:
 # Create the global variables needed for:
-# - server_socket
-# - accept_thread
-# - auction_thread
-# - client_threads
-# - accepting_clients
-# - auction_started
-# - current_item_index
-# - current_price
-# - current_winner
-# - current_winner_name
-# - auction_active
-# - auction_end_time
+server_socket = None
+Thread_accept_1 = None
+Thread_accept_2 = None
+Thread_accept_1 = None
+Thread_auction = None
+client_threads = None
+accepting_clients = None
+auction_started = None
+current_item_index = None
+current_price = None
+current_winner = None
+current_winner_name = None
+auction_active = None
+auction_end_time = None
 
 
 # =========================
@@ -256,8 +252,7 @@ def handle_client(sock, addr):
         # Read the first line from file_obj as the client name.
         #
         # Suggested syntax:
-        # name = file_obj.readline()
-        name = None
+        name = file_obj.readline()
 
         if not name:
             remove_client(sock)
@@ -287,8 +282,7 @@ def handle_client(sock, addr):
             # Read one command line from file_obj.
             #
             # Suggested syntax:
-            # line = file_obj.readline()
-            line = None
+            line = file_obj.readline()
 
             if not line:
                 break
@@ -304,11 +298,13 @@ def handle_client(sock, addr):
 
             # TODO:
             # Process the command:
-            # if command == "VIEW": process_view(sock)
-            # elif command == "BID": process_bid(sock, parts)
-            # elif command == "PASS": process_pass(sock)
-            # elif command == "EXIT": process_exit(sock) and return
-            # else: send ERROR INVALID_COMMAND
+            if command == "VIEW": process_view(sock)
+            elif command == "BID": process_bid(sock, parts)
+            elif command == "PASS": process_pass(sock)
+            elif command == "EXIT":
+              process_exit(sock)
+              return None
+            else: send_message(sock, "ERROR INVALID_COMMAND")
 
     except:
         pass
@@ -336,7 +332,7 @@ def accept_clients_loop():
     #    stop accepting more clients.
     #
     # Suggested socket syntax:
-    # sock, addr = server_socket.accept()
+    sock, addr = server_socket.accept()
     pass
 
 
@@ -380,42 +376,51 @@ def auction_loop():
 # Start / Shutdown
 # =========================
 def start_server():
-    # TODO:
     # If this function modifies global variables,
     # remember to declare them with global.
     #
+    global server_socket
     # General logic:
     # 1. Create the server socket.
-    #    Suggested syntax:
-    #    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     #
     # 2. Allow fast reuse of the port.
-    #    Suggested syntax:
-    #    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     #
     # 3. Bind the socket to the server address.
-    #    Suggested syntax:
-    #    server_socket.bind((HOST, PORT))
+    server_socket.bind((HOST, PORT))
     #
     # 4. Start listening for connections.
-    #    Suggested syntax:
-    #    server_socket.listen()
+    server_socket.listen(EXPECTED_CLIENTS)
+    # *6. Wait until all expected clients are connected.
     #
-    # 5. Create and start the thread that accepts clients.
-    #
-    # 6. Wait until all expected clients are connected.
-    #
+    addr = server_socket.accept()
+    print(f"Connected by {addr}")
+    addr = server_socket.accept()
+    print(f"Connected by {addr}")
+    addr = server_socket.accept()
+    print(f"Connected by {addr}")
+    # *5. Create and start the thread that accepts clients.
+    Thread_accept_1 = threading.Thread(target= accept_clients_loop, args = (server_socket,))
+    Thread_accept_1.start()
+    Thread_accept_2 = threading.Thread(target= accept_clients_loop, args = (server_socket,))
+    Thread_accept_2.start()
+    Thread_accept_3 = threading.Thread(target= accept_clients_loop, args = (server_socket,))
+    Thread_accept_3.start()
     # 7. Create and start the auction thread.
-    #
+    Thread_auction = threading.Thread(target= auction_loop, args = (1))
     # 8. Wait for the auction thread to finish.
-    #
+    Thread_auction.join()
     # 9. Close the server socket.
-    #
+    server_socket.close()
     # 10. Wait for the accept thread.
-    #
+    Thread_accept_1.join()
+    Thread_accept_2.join()
+    Thread_accept_3.join()
     # 11. Close all client sockets.
-    #
+    #client_socket.join()
     # 12. Wait for all client threads.
     #
     # 13. Print SERVER_CLOSED.
+    log_message("SERVER_CLOSED")
     pass
