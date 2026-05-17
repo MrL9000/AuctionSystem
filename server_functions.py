@@ -46,6 +46,11 @@ items = [
     {"name": "Phone", "base_price": 300},
     {"name": "Tablet", "base_price": 400},
 ]
+items_in_use = [
+    {"current_winner": None, "current_name": "Laptop", "current_price": 500},
+    {"current_winner": None, "current_name": "Phone", "current_price": 300},
+    {"current_winner": None, "current_name": "Tablet", "current_price": 400},
+]
 
 # variables needed to keep the record of connected clients.
 clients = []
@@ -65,11 +70,11 @@ stop_event = threading.Event()
 server_socket = None
 Thread_accept_1 = None
 Thread_accept_2 = None
-Thread_accept_1 = None
+Thread_accept_3 = None
 Thread_auction = None
-client_threads = None
-accepting_clients = None
-auction_started = None
+client_threads = [None, None, None]
+
+auction_started = False
 current_item_index = None
 current_price = None
 current_winner = None
@@ -86,15 +91,15 @@ def safe_shutdown_close(sock):
     # Close the socket correctly.
     #
     # Suggested syntax:
-    # try:
-    #     sock.shutdown(socket.SHUT_RDWR)
-    # except:
-    #     pass
-    #
-    # try:
-    #     sock.close()
-    # except:
-    #     pass
+    try:
+        sock.shutdown(socket.SHUT_RDWR)
+    except:
+        pass
+    
+    try:
+        sock.close()
+    except:
+        pass
     pass
 
 
@@ -103,11 +108,11 @@ def send_message(sock, message):
     # Send one complete line to a client socket.
     #
     # Suggested syntax:
-    # try:
-    #     sock.sendall((message + "\n").encode("utf-8"))
-    #     return True
-    # except:
-    #     return False
+    try:
+        sock.sendall((message + "\n").encode("utf-8"))
+        return True
+    except:
+        return False
     pass
 
 
@@ -234,6 +239,9 @@ def process_exit(sock):
     # General logic:
     # 1. Send OK EXIT.
     # 2. Remove the client with remove_client(sock).
+    
+    send_message("OK EXIT")
+    remove_client(sock)
     pass
 
 
@@ -273,7 +281,10 @@ def handle_client(sock, addr):
         # - store file_obj
         # - mark the client as active
         # - initialize its PASS flag as False
-
+        with clients_lock:
+            client_names.append(name)
+            client_files.append(file_obj)
+            client_active.append(True)
         send_message(sock, f"[SERVER] HELLO NAME={name}")
         log_message(f"[SERVER] CLIENT_REGISTERED NAME={name} ADDR={addr}")
 
@@ -312,13 +323,14 @@ def handle_client(sock, addr):
     remove_client(sock)
 
 
-def accept_clients_loop():
+def accept_clients_loop(i):
     # TODO:
     # If this function modifies global variables,
     # remember to declare them with global.
     #
     # General logic:
     # 1. Print that the server is listening.
+    log_message("SERVER " + str(i) + " IS LISTENING")
     # 2. While the server is accepting clients:
     #       accept a new connection
     #       accept() returns:
@@ -332,7 +344,10 @@ def accept_clients_loop():
     #    stop accepting more clients.
     #
     # Suggested socket syntax:
-    sock, addr = server_socket.accept()
+    with clients_lock:
+      sock, addr = server_socket.accept()
+    client_threads[i] = threading.Thread(target= handle_client, args = (sock, addr))
+    client_threads[i].start()
     pass
 
 
@@ -341,6 +356,8 @@ def auction_loop():
     # If this function modifies global variables,
     # remember to declare them with global.
     #
+    global auction_active
+    global auction_end_time
     # General logic:
     # 1. Mark that the auction phase has started.
     # 2. Iterate through all items in the item list.
@@ -352,6 +369,16 @@ def auction_loop():
     #       - reset PASS flags
     #       - clear bid_event
     #       - broadcast AUCTION_START
+    bid_event.clear()
+    i = 0
+    for item in items_in_use:
+        item.current_price = items[i].base_price
+        item.current_winner = None
+
+        i+=1
+    auction_active = True
+    broadcast("AUCTION_START")
+    auction_end_time = time.time() + AUCTION_DURATION
     #
     # 4. While the auction is active:
     #       - compute remaining = int(auction_end_time - time.time())
@@ -360,15 +387,27 @@ def auction_loop():
     #       - wait for new bids with:
     #             bid_event.wait(timeout=0.5)
     #       - if the event was set, clear it with bid_event.clear()
+    remaining = int(auction_end_time - time.time())
+    while (remaining > 0):
+        broadcast("TIME_LEFT " + str(remaining))
+        bid_event.wait(timeout=0.5)
+        bid_event.clear()
+        remaining = int(auction_end_time - time.time())
     #
     # 5. When the timer finishes:
     #       - mark auction_active = False
     #       - if there is a winner, send AUCTION_END with winner and price
     #       - otherwise send AUCTION_END with WINNER=None
     #
+    auction_active = False
+    for item in items_in_use:
+        if item.current_winner != None:
+            broadcast("AUCTION_END, WINNER IS " + item.current_winner + " AND PRICE IS " + str(item.current_price))
     # 6. After all items:
     #       - broadcast SERVER_SHUTDOWN
     #       - set stop_event
+    broadcast("SERVER_SHUTDOWN")
+    stop_event.set()
     pass
 
 
@@ -380,6 +419,9 @@ def start_server():
     # remember to declare them with global.
     #
     global server_socket
+    global Thread_accept_1
+    global Thread_accept_2
+    global Thread_accept_3
     # General logic:
     # 1. Create the server socket.
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -392,33 +434,29 @@ def start_server():
     #
     # 4. Start listening for connections.
     server_socket.listen(EXPECTED_CLIENTS)
-    # *6. Wait until all expected clients are connected.
-    #
-    addr = server_socket.accept()
-    print(f"Connected by {addr}")
-    addr = server_socket.accept()
-    print(f"Connected by {addr}")
-    addr = server_socket.accept()
-    print(f"Connected by {addr}")
     # *5. Create and start the thread that accepts clients.
-    Thread_accept_1 = threading.Thread(target= accept_clients_loop, args = (server_socket,))
+    Thread_accept_1 = threading.Thread(target= accept_clients_loop, args = ([0]))
     Thread_accept_1.start()
-    Thread_accept_2 = threading.Thread(target= accept_clients_loop, args = (server_socket,))
+    Thread_accept_2 = threading.Thread(target= accept_clients_loop, args = ([1]))
     Thread_accept_2.start()
-    Thread_accept_3 = threading.Thread(target= accept_clients_loop, args = (server_socket,))
+    Thread_accept_3 = threading.Thread(target= accept_clients_loop, args = ([2]))
     Thread_accept_3.start()
+    # *6. Wait until all expected clients are connected and
+    #
+    # *10. Wait for the accept threads.
+    Thread_accept_1.join()
+    Thread_accept_2.join()
+    Thread_accept_3.join()
     # 7. Create and start the auction thread.
-    Thread_auction = threading.Thread(target= auction_loop, args = (1))
+    Thread_auction = threading.Thread(target= auction_loop, args = ([]))
     # 8. Wait for the auction thread to finish.
     Thread_auction.join()
     # 9. Close the server socket.
     server_socket.close()
-    # 10. Wait for the accept thread.
-    Thread_accept_1.join()
-    Thread_accept_2.join()
-    Thread_accept_3.join()
     # 11. Close all client sockets.
-    #client_socket.join()
+    client_threads[0].join()
+    client_threads[1].join()
+    client_threads[2].join()
     # 12. Wait for all client threads.
     #
     # 13. Print SERVER_CLOSED.
