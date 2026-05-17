@@ -117,6 +117,9 @@ def send_message(sock, message):
 
 
 def broadcast(message):
+    global clients_lock
+    global clients
+
     # TODO:
     # Send the same message to all active clients.
     #
@@ -125,10 +128,19 @@ def broadcast(message):
     # 2. Iterate over that copy.
     # 3. For each active client, call send_message(sock, message).
     # 4. If sending fails, remove that client.
+    with clients_lock:
+        clients_copy = clients
+    for sock in clients_copy:
+        try: send_message(sock, message)
+        except: remove_client(sock)
     pass
 
 
 def remove_client(sock):
+    global clients_lock
+    global clients
+    global client_active
+    global client_names
     # TODO:
     # Remove one client from the server record.
     #
@@ -139,6 +151,18 @@ def remove_client(sock):
     # 4. Remove its name, file object, and PASS flag from dictionaries.
     # 5. After leaving the critical section, close the file object if it exists.
     # 6. Close the socket with safe_shutdown_close(sock).
+    with clients_lock:
+        i = 0
+        for sock_old in clients:
+            if sock_old == sock:
+                clients[i] = None
+                client_active[i] = False
+                client_names[i] = None
+                file = client_files
+                client_files = False
+                break
+    file.close()
+    safe_shutdown_close(sock)
     pass
 
 
@@ -150,6 +174,8 @@ def close_all_clients():
     # 1. Make a copy of the client list.
     # 2. Iterate over the copy.
     # 3. Call remove_client(sock) for each one.
+    for sock in clients:
+        safe_shutdown_close(sock)
     pass
 
 
@@ -164,6 +190,7 @@ def get_current_item():
 
 
 def reset_pass_flags():
+    global passed_current_item
     # TODO:
     # Reset the PASS flag of all connected clients.
     #
@@ -171,6 +198,8 @@ def reset_pass_flags():
     # - Enter clients_lock
     # - For every client in the client list:
     #       passed_current_item[sock] = False
+    for item in passed_current_item:
+        item = False
     pass
 
 
@@ -178,6 +207,7 @@ def reset_pass_flags():
 # Command Processing
 # =========================
 def process_view(sock):
+    send_message("VIEW")
     # TODO:
     # Answer the VIEW command.
     #
@@ -192,6 +222,7 @@ def process_view(sock):
 
 
 def process_pass(sock):
+    send_message("PASS")
     # TODO:
     # Process the PASS command.
     #
@@ -205,6 +236,7 @@ def process_pass(sock):
 
 
 def process_bid(sock, parts):
+    send_message("BID")
     # TODO:
     # Remember:
     # if this function modifies global variables,
@@ -233,6 +265,7 @@ def process_bid(sock, parts):
 
 
 def process_exit(sock):
+    send_message("EXIT")
     # TODO:
     # Process EXIT.
     #
@@ -249,6 +282,11 @@ def process_exit(sock):
 # Threads
 # =========================
 def handle_client(sock, addr):
+    global clients_lock
+    global clients
+    global client_active
+    global client_files
+    global client_names
     try:
         # This wrapper allows reading complete lines from the socket.
         file_obj = sock.makefile("r", encoding="utf-8")
@@ -282,6 +320,7 @@ def handle_client(sock, addr):
         # - mark the client as active
         # - initialize its PASS flag as False
         with clients_lock:
+            clients.append(sock)
             client_names.append(name)
             client_files.append(file_obj)
             client_active.append(True)
@@ -358,6 +397,7 @@ def auction_loop():
     #
     global auction_active
     global auction_end_time
+    global items_in_use
     # General logic:
     # 1. Mark that the auction phase has started.
     # 2. Iterate through all items in the item list.
@@ -374,8 +414,8 @@ def auction_loop():
     for item in items_in_use:
         item.current_price = items[i].base_price
         item.current_winner = None
-
         i+=1
+    reset_pass_flags()
     auction_active = True
     broadcast("AUCTION_START")
     auction_end_time = time.time() + AUCTION_DURATION
@@ -403,6 +443,9 @@ def auction_loop():
     for item in items_in_use:
         if item.current_winner != None:
             broadcast("AUCTION_END, WINNER IS " + item.current_winner + " AND PRICE IS " + str(item.current_price))
+        else:
+            broadcast("AUCTION_END, WINNER=None")
+            
     # 6. After all items:
     #       - broadcast SERVER_SHUTDOWN
     #       - set stop_event
