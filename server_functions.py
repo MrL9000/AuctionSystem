@@ -175,7 +175,7 @@ def close_all_clients():
     # 2. Iterate over the copy.
     # 3. Call remove_client(sock) for each one.
     for sock in clients:
-        safe_shutdown_close(sock)
+        remove_client(sock)
     pass
 
 
@@ -186,6 +186,10 @@ def get_current_item():
     # Suggested logic:
     # - If current_item_index is valid, return items[current_item_index]
     # - Otherwise return None
+    if 0<= current_item_index <= 2:
+      return items_in_use[current_item_index]
+    else:
+      return None
     pass
 
 
@@ -218,11 +222,22 @@ def process_view(sock):
     # 4. If the auction is active, send:
     #       item name, current price, and current leader
     # 5. Otherwise send VIEW NO_ACTIVE_AUCTION.
+    with clients_lock:
+        i = 0
+        for sock_old in clients:
+            if not auction_active:
+                send_message(sock, "NO_ACTIVE_AUCTION")
+            elif sock_old == sock:
+                if (get_current_item() != None):
+                    send_message(sock, get_current_item()['current_name'] + ", " + str(get_current_item()['current_price']) + ", " + get_current_item()['current_leader'])
+                else:
+                    send_message(sock, "NO_MORE_ITEMS")
     pass
 
 
 def process_pass(sock):
     send_message("PASS")
+    global client_active
     # TODO:
     # Process the PASS command.
     #
@@ -232,6 +247,11 @@ def process_pass(sock):
     # 3. Get the client name.
     # 4. Send OK PASS to that client.
     # 5. Broadcast that this client passed.
+    with clients_lock:
+      i = 0
+      for sock_old in clients:
+          if sock_old == sock:
+              passed_current_item[i] = True
     pass
 
 
@@ -324,14 +344,12 @@ def handle_client(sock, addr):
             client_names.append(name)
             client_files.append(file_obj)
             client_active.append(True)
+            passed_current_item.append(False)
         send_message(sock, f"[SERVER] HELLO NAME={name}")
         log_message(f"[SERVER] CLIENT_REGISTERED NAME={name} ADDR={addr}")
 
         while not stop_event.is_set():
-            # TODO:
             # Read one command line from file_obj.
-            #
-            # Suggested syntax:
             line = file_obj.readline()
 
             if not line:
@@ -398,6 +416,7 @@ def auction_loop():
     global auction_active
     global auction_end_time
     global items_in_use
+    global current_item_index
     # General logic:
     # 1. Mark that the auction phase has started.
     # 2. Iterate through all items in the item list.
@@ -417,34 +436,38 @@ def auction_loop():
         i+=1
     reset_pass_flags()
     auction_active = True
-    broadcast("AUCTION_START")
-    auction_end_time = time.time() + AUCTION_DURATION
-    #
-    # 4. While the auction is active:
-    #       - compute remaining = int(auction_end_time - time.time())
-    #       - if remaining <= 0, finish this auction
-    #       - optionally send TIME_LEFT
-    #       - wait for new bids with:
-    #             bid_event.wait(timeout=0.5)
-    #       - if the event was set, clear it with bid_event.clear()
-    remaining = int(auction_end_time - time.time())
-    while (remaining > 0):
-        broadcast("TIME_LEFT " + str(remaining))
-        bid_event.wait(timeout=0.5)
-        bid_event.clear()
-        remaining = int(auction_end_time - time.time())
-    #
-    # 5. When the timer finishes:
-    #       - mark auction_active = False
-    #       - if there is a winner, send AUCTION_END with winner and price
-    #       - otherwise send AUCTION_END with WINNER=None
-    #
-    auction_active = False
+    current_item_index = 0
     for item in items_in_use:
-        if item.current_winner != None:
-            broadcast("AUCTION_END, WINNER IS " + item.current_winner + " AND PRICE IS " + str(item.current_price))
-        else:
-            broadcast("AUCTION_END, WINNER=None")
+      broadcast("AUCTION_START")
+      auction_end_time = time.time() + AUCTION_DURATION
+      #
+      # 4. While the auction is active:
+      #       - compute remaining = int(auction_end_time - time.time())
+      #       - if remaining <= 0, finish this auction
+      #       - optionally send TIME_LEFT
+      #       - wait for new bids with:
+      #             bid_event.wait(timeout=0.5)
+      #       - if the event was set, clear it with bid_event.clear()
+      remaining = int(auction_end_time - time.time())
+      while (remaining > 0):
+          broadcast("TIME_LEFT " + str(remaining))
+          bid_event.wait(timeout=0.5)
+          bid_event.clear()
+          remaining = int(auction_end_time - time.time())
+      #
+      # 5. When the timer finishes:
+      #       - mark auction_active = False
+      #       - if there is a winner, send AUCTION_END with winner and price
+      #       - otherwise send AUCTION_END with WINNER=None
+      #
+      auction_active = False
+      for item in items_in_use:
+          if item.current_winner != None:
+              broadcast("AUCTION_END, WINNER IS " + item.current_winner + " AND PRICE IS " + str(item.current_price))
+          else:
+              broadcast("AUCTION_END, WINNER=None")
+      current_item_index += 1
+      reset_pass_flags()
             
     # 6. After all items:
     #       - broadcast SERVER_SHUTDOWN
@@ -497,11 +520,10 @@ def start_server():
     # 9. Close the server socket.
     server_socket.close()
     # 11. Close all client sockets.
+    close_all_clients()    # 12. Wait for all client threads.
     client_threads[0].join()
     client_threads[1].join()
     client_threads[2].join()
-    # 12. Wait for all client threads.
-    #
     # 13. Print SERVER_CLOSED.
     log_message("SERVER_CLOSED")
     pass
