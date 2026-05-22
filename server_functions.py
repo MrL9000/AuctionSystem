@@ -436,6 +436,7 @@ def auction_loop():
     auction_active = True
     current_item_index = 0
     for item in items_in_use:
+      broadcast("AUCTION_START ITEM= " + item['current_name'])
       log_message("AUCTION_START ITEM= " + item['current_name'])
       auction_end_time = time.time() + AUCTION_DURATION
       #
@@ -448,7 +449,8 @@ def auction_loop():
       #       - if the event was set, clear it with bid_event.clear()
       remaining = int(auction_end_time - time.time())
       while (remaining > 0):
-          broadcast("TIME_LEFT " + str(remaining))
+          broadcast("TIME_LEFT ITEM= " + str(remaining))
+          log_message("TIME_LEFT ITEM= " + str(remaining))
           bid_event.wait(timeout=0.5)
           bid_event.clear()
           remaining = int(auction_end_time - time.time())
