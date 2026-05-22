@@ -54,10 +54,10 @@ items_in_use = [
 
 # variables needed to keep the record of connected clients.
 clients = []
-client_names = {}
-client_files = {}
-client_active = {}
-passed_current_item = {}
+client_names = []
+client_files = []
+client_active = []
+passed_current_item = []
 
 # synchronization objects needed by the server.
 clients_lock = threading.Lock()
@@ -131,6 +131,7 @@ def broadcast(message):
     with clients_lock:
         clients_copy = clients
     for sock in clients_copy:
+        #log_message("tried to broadcast" + str(sock))
         try: send_message(sock, message)
         except: remove_client(sock)
     pass
@@ -141,6 +142,7 @@ def remove_client(sock):
     global clients
     global client_active
     global client_names
+    global client_files
     # TODO:
     # Remove one client from the server record.
     #
@@ -158,10 +160,10 @@ def remove_client(sock):
                 clients[i] = None
                 client_active[i] = False
                 client_names[i] = None
-                file = client_files
+                #file = client_files
                 client_files = False
                 break
-    file.close()
+    #file.close()
     safe_shutdown_close(sock)
     pass
 
@@ -211,7 +213,7 @@ def reset_pass_flags():
 # Command Processing
 # =========================
 def process_view(sock):
-    send_message("VIEW")
+    send_message(sock, "VIEW")
     # TODO:
     # Answer the VIEW command.
     #
@@ -229,14 +231,14 @@ def process_view(sock):
                 send_message(sock, "NO_ACTIVE_AUCTION")
             elif sock_old == sock:
                 if (get_current_item() != None):
-                    send_message(sock, get_current_item()['current_name'] + ", " + str(get_current_item()['current_price']) + ", " + get_current_item()['current_leader'])
+                    send_message(sock, str(get_current_item()['current_name']) + ", " + str(get_current_item()['current_price']) + ", " + str(get_current_item()['current_winner']))
                 else:
                     send_message(sock, "NO_MORE_ITEMS")
     pass
 
 
 def process_pass(sock):
-    send_message("PASS")
+    send_message(sock, "PASS")
     global client_active
     # TODO:
     # Process the PASS command.
@@ -256,7 +258,7 @@ def process_pass(sock):
 
 
 def process_bid(sock, parts):
-    send_message("BID")
+    send_message(sock, "BID")
     # TODO:
     # Remember:
     # if this function modifies global variables,
@@ -285,7 +287,7 @@ def process_bid(sock, parts):
 
 
 def process_exit(sock):
-    send_message("EXIT")
+    send_message(sock, "EXIT")
     # TODO:
     # Process EXIT.
     #
@@ -319,17 +321,13 @@ def handle_client(sock, addr):
         #
         # Suggested syntax:
         name = file_obj.readline()
-
         if not name:
             remove_client(sock)
             return
-
         name = name.strip()
-
         if name == "":
             remove_client(sock)
             return
-
         # TODO:
         # Save the client information in the server record.
         #
@@ -347,7 +345,6 @@ def handle_client(sock, addr):
             passed_current_item.append(False)
         send_message(sock, f"[SERVER] HELLO NAME={name}")
         log_message(f"[SERVER] CLIENT_REGISTERED NAME={name} ADDR={addr}")
-
         while not stop_event.is_set():
             # Read one command line from file_obj.
             line = file_obj.readline()
@@ -366,6 +363,7 @@ def handle_client(sock, addr):
 
             # TODO:
             # Process the command:
+            log_message(command)
             if command == "VIEW": process_view(sock)
             elif command == "BID": process_bid(sock, parts)
             elif command == "PASS": process_pass(sock)
@@ -374,9 +372,9 @@ def handle_client(sock, addr):
               return None
             else: send_message(sock, "ERROR INVALID_COMMAND")
 
-    except:
-        pass
-
+    except Exception as e:
+      log_message(e)
+      pass
     remove_client(sock)
 
 
@@ -431,14 +429,14 @@ def auction_loop():
     bid_event.clear()
     i = 0
     for item in items_in_use:
-        item.current_price = items[i].base_price
-        item.current_winner = None
+        item['current_price'] = items[i]['base_price']
+        item['current_winner'] = None
         i+=1
     reset_pass_flags()
     auction_active = True
     current_item_index = 0
     for item in items_in_use:
-      broadcast("AUCTION_START")
+      log_message("AUCTION_START ITEM= " + item['current_name'])
       auction_end_time = time.time() + AUCTION_DURATION
       #
       # 4. While the auction is active:
@@ -462,8 +460,8 @@ def auction_loop():
       #
       auction_active = False
       for item in items_in_use:
-          if item.current_winner != None:
-              broadcast("AUCTION_END, WINNER IS " + item.current_winner + " AND PRICE IS " + str(item.current_price))
+          if item['current_winner'] != None:
+              broadcast("AUCTION_END, WINNER IS " + item['current_winner'] + " AND PRICE IS " + str(item['current_price']))
           else:
               broadcast("AUCTION_END, WINNER=None")
       current_item_index += 1
@@ -515,6 +513,7 @@ def start_server():
     Thread_accept_3.join()
     # 7. Create and start the auction thread.
     Thread_auction = threading.Thread(target= auction_loop, args = ([]))
+    Thread_auction.start()
     # 8. Wait for the auction thread to finish.
     Thread_auction.join()
     # 9. Close the server socket.
