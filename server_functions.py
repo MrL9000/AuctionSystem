@@ -303,7 +303,7 @@ def process_bid(sock, parts):
             if auction_active:
                 min_valid = get_current_item()['current_price'] + MIN_INCREMENT
                 if bid_value < min_valid:
-                    send_message(sock, "BID_TOO_LOW")
+                    send_message(sock, "ERROR BID_TOO_LOW")
                 else:
                     get_current_item()['current_price'] = bid_value
                     get_current_item()['current_winner'] = sock
