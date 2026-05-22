@@ -130,7 +130,7 @@ def broadcast(message):
     # 4. If sending fails, remove that client.
     with clients_lock:
       for sock in clients:
-          log_message("tried to broadcast" + str(sock))
+          #log_message("tried to broadcast" + str(sock))
           try: send_message(sock, message)
           except Exception as e:
               log_message(e)
@@ -165,6 +165,7 @@ def remove_client(sock):
                 #file = client_files
                 client_files = False
                 break
+            i =+ 1
     #file.close()
     safe_shutdown_close(sock)
     pass
@@ -190,7 +191,7 @@ def get_current_item():
     # Suggested logic:
     # - If current_item_index is valid, return items[current_item_index]
     # - Otherwise return None
-    if 0<= current_item_index <= 2:
+    if 0 <= current_item_index <= 2:
       return items_in_use[current_item_index]
     else:
       return None
@@ -266,6 +267,9 @@ def process_bid(sock, parts):
     # Remember:
     # if this function modifies global variables,
     # use the Python keyword global.
+    global client_lock
+    global clients
+    global client_names
     #
     # General logic:
     # 1. Verify that the command has exactly two parts:
@@ -286,6 +290,28 @@ def process_bid(sock, parts):
     # 10. Send OK BID_ACCEPTED.
     # 11. Broadcast NEW_BID.
     # 12. Notify the timer thread with bid_event.set().
+    if len(parts) == 2:
+        bid_value = int(parts[1])
+        with clients_lock:
+            i = 0
+            for sock_old in clients:
+                if sock_old == sock:
+                    client_name = client_names[i]
+                    break
+                i =+ 1
+        with auction_lock:
+            if auction_active:
+                min_valid = get_current_item()['current_price'] + MIN_INCREMENT
+                if bid_value < min_valid:
+                    send_message(sock, "BID_TOO_LOW")
+                else:
+                    get_current_item()['current_price'] = bid_value
+                    get_current_item()['current_winner'] = sock
+                    get_current_item()['current_name'] = client_name
+                    send_message(sock, "NEW_BID NAME="+ client_name +" PRICE="+str(bid_value))
+            else:
+                send_message(sock, "AUCTION INACTIVE")
+    else: send_message(sock, "BID FORMAT ERROR")
     pass
 
 
@@ -440,6 +466,7 @@ def auction_loop():
     auction_active = True
     current_item_index = 0
     for item in items_in_use:
+      auction_active = True
       broadcast("AUCTION_START ITEM= " + item['current_name'])
       log_message("AUCTION_START ITEM= " + item['current_name'])
       auction_end_time = time.time() + AUCTION_DURATION
@@ -465,11 +492,10 @@ def auction_loop():
       #       - otherwise send AUCTION_END with WINNER=None
       #
       auction_active = False
-      for item in items_in_use:
-          if item['current_winner'] != None:
-              broadcast("AUCTION_END, WINNER IS " + item['current_winner'] + " AND PRICE IS " + str(item['current_price']))
-          else:
-              broadcast("AUCTION_END, WINNER=None")
+      if item['current_winner'] != None:
+          broadcast("AUCTION_END, WINNER IS " + item['current_name'] + " AND PRICE IS " + str(item['current_price']))
+      else:
+          broadcast("AUCTION_END, WINNER=None")
       current_item_index += 1
       reset_pass_flags()
             
