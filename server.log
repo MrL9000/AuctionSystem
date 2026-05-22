@@ -1,140 +1,249 @@
 SERVER 0 IS LISTENING
 SERVER 1 IS LISTENING
 SERVER 2 IS LISTENING
-[SERVER] CLIENT_REGISTERED NAME=Alice ADDR=('127.0.0.1', 33610)
-[SERVER] CLIENT_REGISTERED NAME=Bob ADDR=('127.0.0.1', 33618)
+[SERVER] CLIENT_REGISTERED NAME=Carol ADDR=('127.0.0.1', 60958)
+[SERVER] CLIENT_REGISTERED NAME=Bob ADDR=('127.0.0.1', 60948)
+[SERVER] CLIENT_REGISTERED NAME=Alice ADDR=('127.0.0.1', 60964)
+tried to broadcast<socket.socket fd=5, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60948)>
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket fd=7, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60964)>
 AUCTION_START ITEM= Laptop
-[SERVER] CLIENT_REGISTERED NAME=Carol ADDR=('127.0.0.1', 33630)
+tried to broadcast<socket.socket fd=5, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60948)>
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket fd=7, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60964)>
 TIME_LEFT ITEM= 19
+tried to broadcast<socket.socket fd=5, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60948)>
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket fd=7, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60964)>
 TIME_LEFT ITEM= 19
 VIEW
+tried to broadcast<socket.socket fd=5, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60948)>
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket fd=7, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60964)>
 TIME_LEFT ITEM= 18
+tried to broadcast<socket.socket fd=5, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60948)>
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket fd=7, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60964)>
 TIME_LEFT ITEM= 18
-BID
 VIEW
+BID
+tried to broadcast<socket.socket fd=5, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60948)>
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket fd=7, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60964)>
 TIME_LEFT ITEM= 17
-TIME_LEFT ITEM= 18
+tried to broadcast<socket.socket fd=5, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60948)>
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket fd=7, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60964)>
+TIME_LEFT ITEM= 17
 BID
 BID
-TIME_LEFT ITEM= 17
-TIME_LEFT ITEM= 17
-BID
+tried to broadcast<socket.socket fd=5, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60948)>
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket fd=7, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60964)>
 TIME_LEFT ITEM= 16
+tried to broadcast<socket.socket fd=5, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60948)>
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket fd=7, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60964)>
 TIME_LEFT ITEM= 16
+BID
+tried to broadcast<socket.socket fd=5, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60948)>
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket fd=7, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60964)>
 TIME_LEFT ITEM= 15
+tried to broadcast<socket.socket fd=5, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60948)>
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket fd=7, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60964)>
 TIME_LEFT ITEM= 15
+tried to broadcast<socket.socket fd=5, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60948)>
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket fd=7, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60964)>
 TIME_LEFT ITEM= 14
+tried to broadcast<socket.socket fd=5, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60948)>
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket fd=7, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60964)>
 TIME_LEFT ITEM= 14
+tried to broadcast<socket.socket fd=5, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60948)>
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket fd=7, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60964)>
 TIME_LEFT ITEM= 13
+tried to broadcast<socket.socket fd=5, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60948)>
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket fd=7, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60964)>
 TIME_LEFT ITEM= 13
+tried to broadcast<socket.socket fd=5, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60948)>
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket fd=7, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60964)>
+TIME_LEFT ITEM= 12
+tried to broadcast<socket.socket fd=5, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60948)>
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket fd=7, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60964)>
+TIME_LEFT ITEM= 12
 VIEW
-TIME_LEFT ITEM= 12
-TIME_LEFT ITEM= 12
+tried to broadcast<socket.socket fd=5, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60948)>
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket fd=7, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60964)>
+TIME_LEFT ITEM= 11
+tried to broadcast<socket.socket fd=5, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60948)>
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket fd=7, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60964)>
+TIME_LEFT ITEM= 11
 BID
 PASS
-TIME_LEFT ITEM= 11
-TIME_LEFT ITEM= 11
-BID
+error
+error
+tried to broadcastNone
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket fd=7, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60964)>
+TIME_LEFT ITEM= 10
+tried to broadcastNone
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket fd=7, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60964)>
+TIME_LEFT ITEM= 10
 PASS
-TIME_LEFT ITEM= 10
-TIME_LEFT ITEM= 10
-TIME_LEFT ITEM= 9
-TIME_LEFT ITEM= 9
-TIME_LEFT ITEM= 8
-TIME_LEFT ITEM= 8
-TIME_LEFT ITEM= 7
-TIME_LEFT ITEM= 7
-TIME_LEFT ITEM= 6
-TIME_LEFT ITEM= 6
 BID
+error
+error
+tried to broadcastNone
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+TIME_LEFT ITEM= 9
+tried to broadcastNone
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+TIME_LEFT ITEM= 9
+tried to broadcastNone
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+TIME_LEFT ITEM= 8
+tried to broadcastNone
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+TIME_LEFT ITEM= 8
+tried to broadcastNone
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+TIME_LEFT ITEM= 7
+tried to broadcastNone
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+TIME_LEFT ITEM= 7
+tried to broadcastNone
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+TIME_LEFT ITEM= 6
+tried to broadcastNone
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+TIME_LEFT ITEM= 6
+tried to broadcastNone
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 5
+tried to broadcastNone
+tried to broadcast<socket.socket fd=6, family=2, type=1, proto=0, laddr=('127.0.0.1', 5000), raddr=('127.0.0.1', 60958)>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 5
+BID
+error
+error
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 4
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 4
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 3
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 3
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 2
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 2
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 1
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 1
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 AUCTION_START ITEM= Phone
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 19
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 19
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 18
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 18
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 17
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 17
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 16
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 16
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 15
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 15
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 14
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 14
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 13
-TIME_LEFT ITEM= 13
-TIME_LEFT ITEM= 12
-TIME_LEFT ITEM= 12
-TIME_LEFT ITEM= 11
-TIME_LEFT ITEM= 11
-TIME_LEFT ITEM= 10
-TIME_LEFT ITEM= 10
-TIME_LEFT ITEM= 9
-TIME_LEFT ITEM= 9
-TIME_LEFT ITEM= 8
-TIME_LEFT ITEM= 8
-TIME_LEFT ITEM= 7
-TIME_LEFT ITEM= 7
-TIME_LEFT ITEM= 6
-TIME_LEFT ITEM= 6
-TIME_LEFT ITEM= 5
-TIME_LEFT ITEM= 6
-TIME_LEFT ITEM= 5
-TIME_LEFT ITEM= 5
-TIME_LEFT ITEM= 4
-TIME_LEFT ITEM= 4
-TIME_LEFT ITEM= 3
-TIME_LEFT ITEM= 3
-TIME_LEFT ITEM= 2
-TIME_LEFT ITEM= 2
-TIME_LEFT ITEM= 1
-TIME_LEFT ITEM= 1
-AUCTION_START ITEM= Tablet
-TIME_LEFT ITEM= 19
-TIME_LEFT ITEM= 19
-TIME_LEFT ITEM= 18
-TIME_LEFT ITEM= 18
-TIME_LEFT ITEM= 17
-TIME_LEFT ITEM= 17
-TIME_LEFT ITEM= 16
-TIME_LEFT ITEM= 16
-TIME_LEFT ITEM= 15
-TIME_LEFT ITEM= 15
+tried to broadcastNone
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
+tried to broadcast<socket.socket [closed] fd=-1, family=2, type=1, proto=0>
 TIME_LEFT ITEM= 14
-TIME_LEFT ITEM= 14
-TIME_LEFT ITEM= 13
-TIME_LEFT ITEM= 13
-TIME_LEFT ITEM= 12
-TIME_LEFT ITEM= 12
-TIME_LEFT ITEM= 11
-TIME_LEFT ITEM= 11
-TIME_LEFT ITEM= 10
-TIME_LEFT ITEM= 10
-TIME_LEFT ITEM= 9
-TIME_LEFT ITEM= 9
-TIME_LEFT ITEM= 8
-TIME_LEFT ITEM= 8
-TIME_LEFT ITEM= 7
-TIME_LEFT ITEM= 7
-TIME_LEFT ITEM= 6
-TIME_LEFT ITEM= 6
-TIME_LEFT ITEM= 5
-TIME_LEFT ITEM= 5
-TIME_LEFT ITEM= 4
-TIME_LEFT ITEM= 4
-TIME_LEFT ITEM= 3
-TIME_LEFT ITEM= 3
-TIME_LEFT ITEM= 2
-TIME_LEFT ITEM= 2
-TIME_LEFT ITEM= 1
-TIME_LEFT ITEM= 1
-SERVER_CLOSED

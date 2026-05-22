@@ -129,15 +129,17 @@ def broadcast(message):
     # 3. For each active client, call send_message(sock, message).
     # 4. If sending fails, remove that client.
     with clients_lock:
-        clients_copy = clients
-    for sock in clients_copy:
-        #log_message("tried to broadcast" + str(sock))
-        try: send_message(sock, message)
-        except: remove_client(sock)
-    pass
+      for sock in clients:
+          log_message("tried to broadcast" + str(sock))
+          try: send_message(sock, message)
+          except Exception as e:
+              log_message(e)
+              remove_client(sock)
+      pass
 
 
 def remove_client(sock):
+    log_message("error")
     global clients_lock
     global clients
     global client_active
@@ -254,6 +256,7 @@ def process_pass(sock):
       for sock_old in clients:
           if sock_old == sock:
               passed_current_item[i] = True
+          i+=1
     pass
 
 
@@ -375,6 +378,7 @@ def handle_client(sock, addr):
     except Exception as e:
       log_message(e)
       pass
+    log_message("error")
     remove_client(sock)
 
 
